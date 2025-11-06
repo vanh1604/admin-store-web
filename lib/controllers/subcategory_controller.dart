@@ -1,15 +1,17 @@
 import 'dart:convert';
+
 import 'package:admin_wed/global_variable.dart';
-import 'package:admin_wed/models/category.dart';
+import 'package:admin_wed/models/subcategory.dart';
 import 'package:admin_wed/services/manage_http_response.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:http/http.dart' as http;
 
-class CategoryController {
-  uploadCategory({
+class SubcategoryController {
+  uploadSubcategory({
+    required String categoryId,
+    required String categoryName,
     required dynamic pickedImage,
-    required dynamic pickedBanner,
-    required String name,
+    required String subCategoryName,
     required context,
   }) async {
     try {
@@ -22,34 +24,25 @@ class CategoryController {
         ),
       );
       String image = imageResponse.secureUrl;
-      CloudinaryResponse bannerResponse = await cloudinary.uploadFile(
-        CloudinaryFile.fromByteData(
-          pickedBanner.buffer.asByteData(),
-          identifier: 'pickedBanner',
-          folder: 'category banners',
-        ),
-      );
-      String banner = bannerResponse.secureUrl;
-
-      Category category = Category(
+      Subcategory subcategory = Subcategory(
         id: "",
-        name: name,
+        categoryId: categoryId,
+        categoryName: categoryName,
         image: image,
-        banner: banner,
+        subCategoryName: subCategoryName,
       );
       http.Response res = await http.post(
-        Uri.parse("$uri/api/createcategory"),
-        body: category.toJson(),
+        Uri.parse("$uri/api/subcategories"),
+        body: subcategory.toJson(),
         headers: <String, String>{
           "Content-Type": "application/json; charset=UTF-8",
         },
       );
-
       manageHttpResponse(
         res: res,
         context: context,
         onSuccess: () {
-          showSnackBar(context, "Category created successfully");
+          showSnackBar(context, "Subcategory created successfully");
         },
       );
     } catch (e) {
@@ -57,10 +50,10 @@ class CategoryController {
     }
   }
 
-  Future<List<Category>> loadCategories() async {
+  Future<List<Subcategory>> loadSubcategories() async {
     try {
       http.Response res = await http.get(
-        Uri.parse("$uri/api/getcategory"),
+        Uri.parse("$uri/api/subcategories"),
         headers: <String, String>{
           "Content-Type": "application/json; charset=UTF-8",
         },
@@ -69,18 +62,18 @@ class CategoryController {
       if (res.statusCode == 200) {
         print(res.body);
         Map<String, dynamic> responseData = jsonDecode(res.body);
-        List<dynamic> data = responseData['category'] ?? [];
-        List<Category> categories = data
-            .map((category) => Category.fromJson(category))
+        List<dynamic> data = responseData['subcategories'] ?? [];
+        List<Subcategory> subcategories = data
+            .map((subcategory) => Subcategory.fromJson(subcategory))
             .toList();
-        print(categories);
-        return categories;
+        print(subcategories);
+        return subcategories;
       } else {
-        throw Exception("Failed to load categories");
+        throw Exception("Failed to load subcategories");
       }
     } catch (e) {
       print("Error: $e");
-      throw Exception('An error occurred while loading categories: $e');
+      throw Exception('An error occurred while loading subcategories: $e');
     }
   }
 }

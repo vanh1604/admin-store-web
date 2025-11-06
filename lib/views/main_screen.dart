@@ -1,6 +1,7 @@
 import 'package:admin_wed/views/side_bar_screens/categories_screen.dart';
 import 'package:admin_wed/views/side_bar_screens/orders_screen.dart';
 import 'package:admin_wed/views/side_bar_screens/products_screen.dart';
+import 'package:admin_wed/views/side_bar_screens/subcategory_screen.dart';
 import 'package:admin_wed/views/side_bar_screens/upload_banner_screen.dart';
 import 'package:admin_wed/views/side_bar_screens/user_screen.dart';
 import 'package:admin_wed/views/side_bar_screens/vendors_screen.dart';
@@ -47,6 +48,10 @@ class _MainScreenState extends State<MainScreen> {
       case ProductsScreen.id:
         setState(() {
           _selectedScreen = ProductsScreen();
+        });
+      case SubcategoryScreen.id:
+        setState(() {
+          _selectedScreen = SubcategoryScreen();
         });
         break;
     }
@@ -104,6 +109,11 @@ class _MainScreenState extends State<MainScreen> {
             title: 'Products',
             route: ProductsScreen.id,
             icon: Icons.store,
+          ),
+          AdminMenuItem(
+            title: 'Subcategories',
+            route: SubcategoryScreen.id,
+            icon: Icons.list,
           ),
         ],
         selectedRoute: '',
