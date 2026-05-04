@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 String getBaseUrl() {
-  if (Platform.isAndroid) {
+  if (kIsWeb) {
+    return 'http://localhost:3000';
+  } else if (Platform.isAndroid) {
     // Dành cho Android Emulator
     return 'http://10.0.2.2:3000';
   } else if (Platform.isIOS) {

@@ -20,9 +20,9 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
 
 SPEC CHECKSUMS:
-  file_picker: 7584aae6fa07a041af2b36a2655122d42f578c1a
+  file_picker: e716a70a9fe5fd9e09ebc922d7541464289443af
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
-  path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
+  path_provider_foundation: 0b743cbb62d8e47eab856f09262bb8c1ddcfe6ba
 
 PODFILE CHECKSUM: 54d867c82ac51cbd61b565781b9fada492027009
 

@@ -25,6 +25,7 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
       allowMultiple: false,
+      withData: true,
     );
     if (result != null) {
       setState(() {
