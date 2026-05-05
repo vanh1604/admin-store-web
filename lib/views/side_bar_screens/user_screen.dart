@@ -286,15 +286,30 @@ class _UserScreenState extends State<UserScreen> {
             child: const Text('Hủy'),
           ),
           ElevatedButton(
-            onPressed: () {
-              // TODO: Implement delete functionality
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Đã xóa người dùng: ${user.fullName}'),
-                  backgroundColor: Colors.green,
-                ),
-              );
+            onPressed: () async {
+              Navigator.pop(context); // Close dialog first
+
+              try {
+                await _userController.deleteUser(user.id);
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Đã xóa người dùng: ${user.fullName}'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                  _loadUsers(); // Refresh the list
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Lỗi khi xóa: $e'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              }
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: const Text('Xóa'),

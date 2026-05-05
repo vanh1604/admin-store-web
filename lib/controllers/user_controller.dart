@@ -27,4 +27,22 @@ class UserController {
       throw Exception('An error occurred while loading users: $e');
     }
   }
+
+  Future<void> deleteUser(String id) async {
+    try {
+      http.Response res = await http.delete(
+        Uri.parse("$uri/api/users/$id"),
+        headers: <String, String>{
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      );
+
+      if (res.statusCode != 200 && res.statusCode != 204) {
+        throw Exception("Failed to delete user: ${res.body}");
+      }
+    } catch (e) {
+      print("Error deleting user: $e");
+      throw Exception('An error occurred while deleting user: $e');
+    }
+  }
 }
