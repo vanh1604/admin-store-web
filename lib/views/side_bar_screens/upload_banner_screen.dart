@@ -72,7 +72,7 @@ class _UploadBannerScreenState extends State<UploadBannerScreen> {
           child: Text('Pick Image'),
         ),
         Divider(color: Colors.grey),
-        BannerWidget(),
+        Expanded(child: BannerWidget()),
       ],
     );
   }

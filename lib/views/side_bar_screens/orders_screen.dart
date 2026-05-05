@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:admin_wed/controllers/order_controller.dart';
 import 'package:admin_wed/models/order.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:admin_wed/utils/cloudinary_helper.dart';
 
 class OrdersScreen extends StatefulWidget {
   static const String id = "/orders-screen";
@@ -283,12 +285,24 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         DataCell(
                           ClipRRect(
                             borderRadius: BorderRadius.circular(4),
-                            child: Image.network(
-                              order.image,
+                            child: CachedNetworkImage(
+                              imageUrl: CloudinaryHelper.getThumbnailUrl(order.image, width: 100),
                               width: 50,
                               height: 50,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
+                              placeholder: (context, url) => Container(
+                                width: 50,
+                                height: 50,
+                                color: Colors.grey.shade200,
+                                child: const Center(
+                                  child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) {
                                 return Container(
                                   width: 50,
                                   height: 50,

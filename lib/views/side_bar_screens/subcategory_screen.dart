@@ -45,122 +45,120 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Subcategories',
-                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              alignment: Alignment.topLeft,
+              child: Text(
+                'Subcategories',
+                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Divider(color: Colors.grey),
-            ),
-            FutureBuilder(
-              future: _futureCategories,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (snapshot.hasData) {
-                  List<Category> categories = snapshot.data!;
-                  return DropdownButton<Category>(
-                    value: _selectedCategory,
-                    hint: Text('Select Category'),
-                    items: categories.map((category) {
-                      return DropdownMenuItem(
-                        value: category,
-                        child: Text(category.name),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedCategory = value;
-                      });
-                    },
-                  );
-                } else {
-                  return Center(child: Text('No categories found'));
-                }
-              },
-            ),
-            Row(
-              children: [
-                Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: _image != null
-                      ? Image.memory(_image)
-                      : Center(child: Text('Subcategory image')),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Divider(color: Colors.grey),
+          ),
+          FutureBuilder(
+            future: _futureCategories,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (snapshot.hasData) {
+                List<Category> categories = snapshot.data!;
+                return DropdownButton<Category>(
+                  value: _selectedCategory,
+                  hint: Text('Select Category'),
+                  items: categories.map((category) {
+                    return DropdownMenuItem(
+                      value: category,
+                      child: Text(category.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedCategory = value;
+                    });
+                  },
+                );
+              } else {
+                return Center(child: Text('No categories found'));
+              }
+            },
+          ),
+          Row(
+            children: [
+              Container(
+                width: 150,
+                height: 150,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(5),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 150,
-                    child: TextFormField(
-                      onChanged: (value) {
-                        name = value;
-                      },
-                      validator: (value) {
-                        if (value!.isNotEmpty) {
-                          return null;
-                        } else {
-                          return 'Please Enter Subcategory Name';
-                        }
-                      },
-                      decoration: InputDecoration(
-                        labelText: "Enter Subcategory Name",
-                      ),
+                child: _image != null
+                    ? Image.memory(_image)
+                    : Center(child: Text('Subcategory image')),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 150,
+                  child: TextFormField(
+                    onChanged: (value) {
+                      name = value;
+                    },
+                    validator: (value) {
+                      if (value!.isNotEmpty) {
+                        return null;
+                      } else {
+                        return 'Please Enter Subcategory Name';
+                      }
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Enter Subcategory Name",
                     ),
                   ),
                 ),
-
-                ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await subcategoryController.uploadSubcategory(
-                        categoryId: _selectedCategory!.id,
-                        categoryName: _selectedCategory!.name,
-                        pickedImage: _image,
-                        subCategoryName: name,
-                        context: context,
-                      );
-                      setState(() {
-                        _formKey.currentState!.reset();
-                        _image = null;
-                      });
-                    }
-                  },
-                  child: Text('Save'),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  pickImage();
-                },
-                child: Text('Pick Image'),
               ),
+
+              ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    await subcategoryController.uploadSubcategory(
+                      categoryId: _selectedCategory!.id,
+                      categoryName: _selectedCategory!.name,
+                      pickedImage: _image,
+                      subCategoryName: name,
+                      context: context,
+                    );
+                    setState(() {
+                      _formKey.currentState!.reset();
+                      _image = null;
+                    });
+                  }
+                },
+                child: Text('Save'),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                pickImage();
+              },
+              child: Text('Pick Image'),
             ),
-            Divider(color: Colors.grey),
-            SubcategoryWidget(),
-          ],
-        ),
+          ),
+          Divider(color: Colors.grey),
+          Expanded(child: SubcategoryWidget()),
+        ],
       ),
     );
   }
